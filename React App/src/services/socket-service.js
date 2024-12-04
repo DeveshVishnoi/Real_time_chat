@@ -1,6 +1,6 @@
 const events = require('events');
 
-const CHAT_SERVER_ENDPOINT = "127.0.0.1:8080/api";
+const CHAT_SERVER_ENDPOINT = "https://real-time-chat-wmhv.onrender.com/api";
 let webSocketConnection = null;
 
 export const eventEmitter = new events.EventEmitter();
