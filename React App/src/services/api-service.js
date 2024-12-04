@@ -1,4 +1,4 @@
-const API_ENDPOINTS = "http://localhost:8080/api";
+const API_ENDPOINTS = "https://real-time-chat-wmhv.onrender.com/api";
 
 export async function loginHTTPRequest(email, password) {
     const response = await fetch(`${API_ENDPOINTS}/login`, {
