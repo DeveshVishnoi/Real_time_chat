@@ -1,6 +1,6 @@
 const events = require('events');
 
-const CHAT_SERVER_ENDPOINT = "https://real-time-chat-wmhv.onrender.com/api";
+const CHAT_SERVER_ENDPOINT = "real-time-chat-wmhv.onrender.com/api";
 let webSocketConnection = null;
 
 export const eventEmitter = new events.EventEmitter();
@@ -20,7 +20,7 @@ export function connectToWebSocket(userID) {
         }
     }
     if (window["WebSocket"]) {
-        webSocketConnection = new WebSocket("ws://" + CHAT_SERVER_ENDPOINT + "/ws/" + userID);
+        webSocketConnection = new WebSocket("wss://" + CHAT_SERVER_ENDPOINT + "/ws/" + userID);
         return {
             message: "You are connected to Chat Server",
             webSocketConnection
