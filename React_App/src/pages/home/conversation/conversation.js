@@ -9,7 +9,6 @@ import './conversation.css'
 
 const alignMessages = (userDetails, toUserID) => {
 
-  console.log("Inside the aligh message - ", userDetails, toUserID);
   
   const { email } = userDetails;
   return email !== toUserID;
