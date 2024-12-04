@@ -60,13 +60,12 @@ export function listenToWebSocketEvents() {
     webSocketConnection.onmessage = (event) => {
 
 
-        console.log("Event data : ", event.data);
         
 
         try {
             const socketPayload = JSON.parse(event.data);
 
-            console.log(socketPayload);
+            
             
             switch (socketPayload.message_type) {
                 case 'chatlist-response':
