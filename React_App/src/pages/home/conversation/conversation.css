@@ -97,3 +97,22 @@
     -o-border-image: url('/border-thick.png') 10 / 10px 10px 10px 10px / 10px 15px 5px 10px round;
     border-image: url('/border-thick.png') 10 / 10px 10px 10px 10px / 10px 15px 5px 10px round;
 }
+
+
+.video-call-button {
+    position: absolute;
+    /* right: 25px; */
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4caf50;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .video-call-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
