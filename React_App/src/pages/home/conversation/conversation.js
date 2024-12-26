@@ -126,6 +126,8 @@ function Conversation(props) {
 
 
   const initiateVideoCall = () => {
+
+    window.open(`https://video-chat-1-k9c7.onrender.com/create`, "_blank");
     const messagePayload = {
         fromUserID: userDetails.email,
         message: `Initiating a video call.....................................
@@ -143,7 +145,7 @@ function Conversation(props) {
 
     // Redirect to video call page
     // window.location.href = `https://video-chat-1-k9c7.onrender.com`;
-    window.open(`https://video-chat-1-k9c7.onrender.com/create`, "_blank");
+   
   };
 
   if (messageLoading) {
