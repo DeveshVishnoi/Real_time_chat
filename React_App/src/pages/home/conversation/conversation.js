@@ -138,7 +138,7 @@ function Conversation(props) {
         toUserID: selectedUser.email,
     };
 
-    sendWebSocketMessage(JSON.stringify(messagePayload)); 
+    sendWebSocketMessage(messagePayload); 
     updateConversation([...conversation, messagePayload]); 
 
     scrollMessageContainer(messageContainer); 
