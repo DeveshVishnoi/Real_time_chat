@@ -1,18 +1,16 @@
-import React, { useState, useEffect, useRef, Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   eventEmitter,
   sendWebSocketMessage,
-} from './../../../services/socket-service';
-import { getConversationBetweenUsers } from './../../../services/api-service';
+} from '../../../services/socket-service';
+import { getConversationBetweenUsers } from '../../../services/api-service';
 
-import './conversation.css'
+import './conversation.css';
 
 const alignMessages = (userDetails, toUserID) => {
-
-  
   const { email } = userDetails;
   return email !== toUserID;
-}
+};
 
 const scrollMessageContainer = (messageContainer) => {
   if (messageContainer.current !== null) {
@@ -24,11 +22,11 @@ const scrollMessageContainer = (messageContainer) => {
       console.warn(error);
     }
   }
-}
+};
 
 const getMessageUI = (messageContainer, userDetails, conversations) => {
   return (
-    <ul ref={messageContainer} className='message-thread-container'>
+    <ul ref={messageContainer} className="message-thread-container">
       {conversations.map((conversation, index) => (
         <li
           className={`message ${
@@ -41,20 +39,20 @@ const getMessageUI = (messageContainer, userDetails, conversations) => {
       ))}
     </ul>
   );
-}
+};
 
-const getInitiateConversationUI = (userDetails) =>{
+const getInitiateConversationUI = (userDetails) => {
   if (userDetails !== null) {
     return (
       <div className="message-thread-container start-chatting-banner">
         <p className="heading">
-          You haven 't chatted with {userDetails.username} in a while,
+          You haven&apos;t chatted with {userDetails.username} in a while,
           <span className="sub-heading"> Say Hi.</span>
-        </p>			
+        </p>
       </div>
-    )
-  }    
-}
+    );
+  }
+};
 
 function Conversation(props) {
   const selectedUser = props.selectedUser;
@@ -69,8 +67,7 @@ function Conversation(props) {
       (async () => {
         const conversationsResponse = await getConversationBetweenUsers(userDetails.email, selectedUser.email);
 
-        
-        updateMessageLoading(false)
+        updateMessageLoading(false);
         if (conversationsResponse.data) {
           updateConversation(conversationsResponse.data);
         } else if (conversationsResponse.response === null) {
@@ -78,7 +75,7 @@ function Conversation(props) {
         }
       })();
     }
-  }, [userDetails, selectedUser])
+  }, [userDetails, selectedUser]);
 
   useEffect(() => {
     const newMessageSubscription = (messagePayload) => {
@@ -86,11 +83,7 @@ function Conversation(props) {
         selectedUser !== null &&
         selectedUser.email === messagePayload.fromUserID
       ) {
-
-        
         updateConversation([...conversation, messagePayload]);
-
-        
         scrollMessageContainer(messageContainer);
       }
     };
@@ -100,10 +93,7 @@ function Conversation(props) {
     return () => {
       eventEmitter.removeListener('message-response', newMessageSubscription);
     };
-  }, [
-    conversation,
-    selectedUser
-  ]);
+  }, [conversation, selectedUser]);
 
   const sendMessage = (event) => {
     if (event.key === 'Enter') {
@@ -123,45 +113,79 @@ function Conversation(props) {
           message: message.trim(),
           toUserID: selectedUser.email,
         };
-        
+
         sendWebSocketMessage(messagePayload);
         updateConversation([...conversation, messagePayload]);
 
         scrollMessageContainer(messageContainer);
       }
     }
-  }
+  };
+
+ 
+
+
+  const initiateVideoCall = () => {
+    const messagePayload = {
+        fromUserID: userDetails.email,
+        message: `Initiating a video call.....................................
+        Open this link to connect with me: 
+        ..................."https://video-chat-1-k9c7.onrender.com"...........
+        ......................................................................
+        Wait for 1 minute, I will send you the code to connect with me.`,
+        toUserID: selectedUser.email,
+    };
+
+    sendWebSocketMessage(JSON.stringify(messagePayload)); 
+    updateConversation([...conversation, messagePayload]); 
+
+    scrollMessageContainer(messageContainer); 
+
+    // Redirect to video call page
+    // window.location.href = `https://video-chat-1-k9c7.onrender.com`;
+    window.open(`https://video-chat-1-k9c7.onrender.com/create`, "_blank");
+  };
 
   if (messageLoading) {
     return (
-      <div
-        className="message-overlay"
-      >
+      <div className="message-overlay">
         <h3>
           {selectedUser !== null && selectedUser.username
             ? 'Loading Messages'
             : ' Select a User to chat.'}
         </h3>
       </div>
-    )
+    );
   }
 
   return (
-    <div className='app__conversion-container'>
-      
+    <div className="app__conversion-container">
       {conversation.length > 0
         ? getMessageUI(messageContainer, userDetails, conversation)
         : getInitiateConversationUI(selectedUser)}
 
-      <div className='app__text-container'>
+      <div className="app__text-container">
+      
         <textarea
           placeholder={`${
             selectedUser !== null ? '' : 'Select a user and'
           } Type your message here`}
-          className='text-type'
+          className="text-type"
           onKeyPress={sendMessage}
         ></textarea>
+
+       
+       
       </div>
+      <div><button
+          className="video-call-button"
+          onClick={initiateVideoCall}
+          title={`Call ${selectedUser ? selectedUser.username : 'user'}`}
+          disabled={!selectedUser}
+        >
+          📞 Video
+        </button></div>
+      
     </div>
   );
 }
